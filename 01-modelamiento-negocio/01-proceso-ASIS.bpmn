@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+  id="Definitions_SIGTRAD_ASIS"
+  targetNamespace="http://unap.pe/sigtrad/bpmn">
+
+  <bpmn:collaboration id="Collaboration_1">
+    <bpmn:participant id="Participant_SIGTRAD" name="SIGTRAD-UNAP (AS-IS)" processRef="Process_SIGTRAD_ASIS"/>
+  </bpmn:collaboration>
+
+  <bpmn:process id="Process_SIGTRAD_ASIS" name="Trámite Documentario (AS-IS)" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_Solicitante" name="Solicitante">
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Presentar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Subsanar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_1</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_MesaPartes" name="Mesa de Partes">
+        <bpmn:flowNodeRef>Task_Revisar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Completo</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Registrar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Derivar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_SolicitarSubsanacion</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Oficina" name="Oficina destino">
+        <bpmn:flowNodeRef>Task_Atender</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_RequiereSubsanacion</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Resolver</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_GenerarRespuesta</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Notificar</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <bpmn:startEvent id="StartEvent_1" name="Inicio"/>
+    <bpmn:task id="Task_Presentar" name="Presentar trámite (documento y anexos)"/>
+    <bpmn:task id="Task_Revisar" name="Revisar requisitos básicos"/>
+    <bpmn:exclusiveGateway id="Gateway_Completo" name="¿Trámite completo?"/>
+    <bpmn:task id="Task_Registrar" name="Registrar expediente y asignar código"/>
+    <bpmn:task id="Task_Derivar" name="Derivar a oficina destino"/>
+    <bpmn:task id="Task_Atender" name="Atender expediente (revisión/acción)"/>
+    <bpmn:exclusiveGateway id="Gateway_RequiereSubsanacion" name="¿Requiere subsanación?"/>
+    <bpmn:task id="Task_SolicitarSubsanacion" name="Solicitar subsanación (manual)"/>
+    <bpmn:task id="Task_Subsanar" name="Entregar subsanación"/>
+    <bpmn:task id="Task_Resolver" name="Resolver trámite (aprobar/rechazar)"/>
+    <bpmn:task id="Task_GenerarRespuesta" name="Generar respuesta (documento)"/>
+    <bpmn:task id="Task_Notificar" name="Notificar al solicitante"/>
+    <bpmn:endEvent id="EndEvent_1" name="Fin"/>
+
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="StartEvent_1" targetRef="Task_Presentar"/>
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_Presentar" targetRef="Task_Revisar"/>
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_Revisar" targetRef="Gateway_Completo"/>
+    <bpmn:sequenceFlow id="Flow_4" name="Sí" sourceRef="Gateway_Completo" targetRef="Task_Registrar"/>
+    <bpmn:sequenceFlow id="Flow_5" name="No" sourceRef="Gateway_Completo" targetRef="Task_SolicitarSubsanacion"/>
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="Task_SolicitarSubsanacion" targetRef="Task_Subsanar"/>
+    <bpmn:sequenceFlow id="Flow_7" sourceRef="Task_Subsanar" targetRef="Task_Revisar"/>
+
+    <bpmn:sequenceFlow id="Flow_8" sourceRef="Task_Registrar" targetRef="Task_Derivar"/>
+    <bpmn:sequenceFlow id="Flow_9" sourceRef="Task_Derivar" targetRef="Task_Atender"/>
+    <bpmn:sequenceFlow id="Flow_10" sourceRef="Task_Atender" targetRef="Gateway_RequiereSubsanacion"/>
+    <bpmn:sequenceFlow id="Flow_11" name="Sí" sourceRef="Gateway_RequiereSubsanacion" targetRef="Task_SolicitarSubsanacion"/>
+    <bpmn:sequenceFlow id="Flow_12" name="No" sourceRef="Gateway_RequiereSubsanacion" targetRef="Task_Resolver"/>
+    <bpmn:sequenceFlow id="Flow_13" sourceRef="Task_Resolver" targetRef="Task_GenerarRespuesta"/>
+    <bpmn:sequenceFlow id="Flow_14" sourceRef="Task_GenerarRespuesta" targetRef="Task_Notificar"/>
+    <bpmn:sequenceFlow id="Flow_15" sourceRef="Task_Notificar" targetRef="EndEvent_1"/>
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1">
+
+      <bpmndi:BPMNShape id="Participant_SIGTRAD_di" bpmnElement="Participant_SIGTRAD" isHorizontal="true">
+        <dc:Bounds x="140" y="80" width="1260" height="420"/>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Lane_Solicitante_di" bpmnElement="Lane_Solicitante" isHorizontal="true">
+        <dc:Bounds x="170" y="80" width="1230" height="140"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_MesaPartes_di" bpmnElement="Lane_MesaPartes" isHorizontal="true">
+        <dc:Bounds x="170" y="220" width="1230" height="140"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Oficina_di" bpmnElement="Lane_Oficina" isHorizontal="true">
+        <dc:Bounds x="170" y="360" width="1230" height="140"/>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="220" y="132" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Presentar_di" bpmnElement="Task_Presentar">
+        <dc:Bounds x="300" y="110" width="170" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Revisar_di" bpmnElement="Task_Revisar">
+        <dc:Bounds x="520" y="250" width="170" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Completo_di" bpmnElement="Gateway_Completo" isMarkerVisible="true">
+        <dc:Bounds x="740" y="265" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Registrar_di" bpmnElement="Task_Registrar">
+        <dc:Bounds x="840" y="250" width="200" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Derivar_di" bpmnElement="Task_Derivar">
+        <dc:Bounds x="1080" y="250" width="170" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Atender_di" bpmnElement="Task_Atender">
+        <dc:Bounds x="300" y="390" width="210" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_RequiereSubsanacion_di" bpmnElement="Gateway_RequiereSubsanacion" isMarkerVisible="true">
+        <dc:Bounds x="560" y="405" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SolicitarSubsanacion_di" bpmnElement="Task_SolicitarSubsanacion">
+        <dc:Bounds x="840" y="250" width="200" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Subsanar_di" bpmnElement="Task_Subsanar">
+        <dc:Bounds x="520" y="110" width="170" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Resolver_di" bpmnElement="Task_Resolver">
+        <dc:Bounds x="660" y="390" width="200" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_GenerarRespuesta_di" bpmnElement="Task_GenerarRespuesta">
+        <dc:Bounds x="900" y="390" width="200" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Notificar_di" bpmnElement="Task_Notificar">
+        <dc:Bounds x="1140" y="390" width="170" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_1_di" bpmnElement="EndEvent_1">
+        <dc:Bounds x="1340" y="412" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1">
+        <di:waypoint x="256" y="150"/>
+        <di:waypoint x="300" y="150"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2">
+        <di:waypoint x="470" y="150"/>
+        <di:waypoint x="520" y="290"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_3_di" bpmnElement="Flow_3">
+        <di:waypoint x="690" y="290"/>
+        <di:waypoint x="740" y="290"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_4_di" bpmnElement="Flow_4">
+        <di:waypoint x="790" y="290"/>
+        <di:waypoint x="840" y="290"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_5_di" bpmnElement="Flow_5">
+        <di:waypoint x="765" y="315"/>
+        <di:waypoint x="765" y="330"/>
+        <di:waypoint x="840" y="290"/>
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge id="Flow_6_di" bpmnElement="Flow_6">
+        <di:waypoint x="940" y="250"/>
+        <di:waypoint x="605" y="190"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_7_di" bpmnElement="Flow_7">
+        <di:waypoint x="605" y="190"/>
+        <di:waypoint x="605" y="250"/>
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge id="Flow_8_di" bpmnElement="Flow_8">
+        <di:waypoint x="1040" y="290"/>
+        <di:waypoint x="1080" y="290"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_9_di" bpmnElement="Flow_9">
+        <di:waypoint x="1165" y="330"/>
+        <di:waypoint x="405" y="390"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10_di" bpmnElement="Flow_10">
+        <di:waypoint x="510" y="430"/>
+        <di:waypoint x="560" y="430"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11_di" bpmnElement="Flow_11">
+        <di:waypoint x="585" y="405"/>
+        <di:waypoint x="765" y="315"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_12_di" bpmnElement="Flow_12">
+        <di:waypoint x="610" y="430"/>
+        <di:waypoint x="660" y="430"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13_di" bpmnElement="Flow_13">
+        <di:waypoint x="860" y="430"/>
+        <di:waypoint x="900" y="430"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_14_di" bpmnElement="Flow_14">
+        <di:waypoint x="1100" y="430"/>
+        <di:waypoint x="1140" y="430"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_15_di" bpmnElement="Flow_15">
+        <di:waypoint x="1310" y="430"/>
+        <di:waypoint x="1340" y="430"/>
+      </bpmndi:BPMNEdge>
+
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

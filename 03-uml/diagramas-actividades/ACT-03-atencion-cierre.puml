@@ -1,0 +1,16 @@
+@startuml
+start
+:Oficina revisa expediente;
+if (¿Falta info?) then (Sí)
+  :Registrar observación;
+  :Cambiar estado a Observado;
+  :Notificar solicitante;
+  stop
+else (No)
+  :Adjuntar respuesta (PDF);
+  :Registrar resultado;
+  :Cerrar expediente;
+  :Notificar cierre;
+  stop
+endif
+@enduml

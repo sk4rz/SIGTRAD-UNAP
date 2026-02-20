@@ -1,0 +1,20 @@
+@startuml
+package "SIGTRAD-UNAP" {
+  [Portal Solicitante] as Portal
+  [Backoffice Oficinas] as Backoffice
+  [Mesa de Partes] as Mesa
+  [Servicio Workflow] as Workflow
+  [Servicio Notificaciones] as Notif
+  [Servicio Reportes] as Reportes
+  database "BD SIGTRAD" as DB
+  [Almacenamiento Adjuntos] as Storage
+}
+
+Portal --> Workflow
+Mesa --> Workflow
+Backoffice --> Workflow
+Workflow --> DB
+Workflow --> Storage
+Workflow --> Notif
+Reportes --> DB
+@enduml

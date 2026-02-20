@@ -1,0 +1,41 @@
+@startuml
+class Solicitante {
+  +id: String
+  +tipo: String
+  +dniCodigo: String
+  +nombres: String
+  +correo: String
+  +telefono: String
+}
+class Expediente {
+  +codigo: String
+  +asunto: String
+  +fechaRegistro: DateTime
+  +estado: String
+  +slaDias: int
+}
+class TipoTramite {
+  +id: String
+  +nombre: String
+  +descripcion: String
+  +slaDias: int
+  +requisitos: String
+}
+class Oficina { +id: String +nombre: String }
+class Usuario { +id: String +usuario: String +rol: String }
+class Movimiento { +id: String +fecha: DateTime +accion: String +motivo: String }
+class Observacion { +id: String +detalle: String +fecha: DateTime +plazo: Date }
+class DocumentoAdjunto { +id: String +nombre: String +tipo: String +url: String }
+class Respuesta { +id: String +resultado: String +urlPdf: String +fecha: DateTime }
+class Notificacion { +id: String +canal: String +mensaje: String +fecha: DateTime }
+
+Solicitante "1" -- "0..*" Expediente
+TipoTramite "1" -- "0..*" Expediente
+Oficina "1" -- "0..*" Expediente : responsable >
+Expediente "1" -- "0..*" DocumentoAdjunto
+Expediente "1" -- "0..*" Movimiento
+Usuario "1" -- "0..*" Movimiento
+Expediente "0..1" -- "0..*" Observacion
+Expediente "0..1" -- "0..1" Respuesta
+Expediente "1" -- "0..*" Notificacion
+@enduml

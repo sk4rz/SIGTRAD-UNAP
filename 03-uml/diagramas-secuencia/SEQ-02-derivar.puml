@@ -1,0 +1,14 @@
+@startuml
+actor Oficina
+boundary "Backoffice" as UI
+control "WorkflowController" as W
+database "BD" as DB
+control "Notificaciones" as N
+
+Oficina -> UI: Derivar expediente
+UI -> W: derivar(codigo, destino, motivo)
+W -> DB: registrarMovimiento(codigo, origen, destino, motivo)
+W -> DB: actualizarResponsable(codigo, destino)
+W -> N: notificarDestino(codigo, destino)
+W --> UI: confirmación
+@enduml

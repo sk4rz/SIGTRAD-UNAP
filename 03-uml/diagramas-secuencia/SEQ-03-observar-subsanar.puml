@@ -1,0 +1,20 @@
+@startuml
+actor Oficina
+actor Solicitante
+boundary "Backoffice/Portal" as UI
+control "AtencionController" as A
+database "BD" as DB
+control "Notificaciones" as N
+
+Oficina -> UI: Observar
+UI -> A: observar(codigo, detalle, plazo)
+A -> DB: guardarObservacion(codigo, detalle, plazo)
+A -> DB: cambiarEstado(codigo, "Observado")
+A -> N: notificarSubsanacion(codigo, correo)
+
+Solicitante -> UI: Subsanar
+UI -> A: subsanar(codigo, adjuntos)
+A -> DB: guardarAdjuntos(codigo, adjuntos)
+A -> DB: cambiarEstado(codigo, "En proceso")
+A -> N: confirmarRecepcion(codigo, correo)
+@enduml

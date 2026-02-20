@@ -1,0 +1,19 @@
+@startuml
+actor Solicitante
+boundary "Portal" as UI
+control "TramiteController" as C
+database "BD" as DB
+control "Notificaciones" as N
+
+Solicitante -> UI: Registrar trámite
+UI -> C: enviarFormulario(datos, adjuntos)
+C -> DB: validarTipoYRequisitos(tipo, adjuntos)
+alt OK
+  C -> DB: crearExpediente(datos, tipo, adjuntos)
+  DB --> C: codigoExpediente
+  C -> N: notificarRegistro(codigo, correo)
+  C --> UI: mostrar confirmación + código
+else Error
+  C --> UI: mostrar faltantes
+end
+@enduml

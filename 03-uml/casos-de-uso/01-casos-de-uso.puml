@@ -1,0 +1,53 @@
+@startuml
+left to right direction
+actor Solicitante
+actor "Mesa de Partes" as Mesa
+actor "Tramitador/Oficina" as Oficina
+actor "Jefatura" as Jefe
+actor "Administrador TI" as Admin
+actor "Auditoría" as Auditor
+
+rectangle "SIGTRAD-UNAP" {
+  usecase "CU-01 Registrar trámite" as CU01
+  usecase "CU-02 Consultar bandeja" as CU02
+  usecase "CU-03 Derivar trámite" as CU03
+  usecase "CU-04 Atender y cerrar" as CU04
+  usecase "CU-05 Observar trámite" as CU05
+  usecase "CU-06 Subsanar trámite" as CU06
+  usecase "CU-07 Consultar trazabilidad" as CU07
+  usecase "CU-08 Seguimiento por código" as CU08
+  usecase "CU-09 Notificar eventos" as CU09
+  usecase "CU-10 Reportes y dashboard" as CU10
+  usecase "CU-11 Administrar catálogo" as CU11
+  usecase "CU-12 Administrar usuarios/roles" as CU12
+  usecase "CU-13 Consultar auditoría" as CU13
+  usecase "CU-14 Búsqueda avanzada" as CU14
+}
+
+Solicitante --> CU01
+Solicitante --> CU06
+Solicitante --> CU08
+
+Mesa --> CU01
+
+Oficina --> CU02
+Oficina --> CU03
+Oficina --> CU04
+Oficina --> CU05
+Oficina --> CU07
+Oficina --> CU14
+
+Jefe --> CU10
+Jefe --> CU02
+Jefe --> CU07
+
+Admin --> CU11
+Admin --> CU12
+
+Auditor --> CU13
+
+CU03 .> CU09 : <<include>>
+CU04 .> CU09 : <<include>>
+CU05 .> CU09 : <<include>>
+CU01 .> CU09 : <<include>>
+@enduml

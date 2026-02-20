@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+  id="Definitions_SIGTRAD_TOBE"
+  targetNamespace="http://unap.pe/sigtrad/bpmn">
+
+  <bpmn:collaboration id="Collaboration_2">
+    <bpmn:participant id="Participant_SIGTRAD_TOBE" name="SIGTRAD-UNAP (TO-BE)" processRef="Process_SIGTRAD_TOBE"/>
+  </bpmn:collaboration>
+
+  <bpmn:process id="Process_SIGTRAD_TOBE" name="Trámite Documentario (TO-BE)" isExecutable="false">
+    <bpmn:startEvent id="Start_TOBE" name="Inicio"/>
+    <bpmn:task id="Task_RegistroOnline" name="Registrar trámite (portal / mesa de partes)"/>
+    <bpmn:task id="Task_ValidarAuto" name="Validar requisitos automáticamente"/>
+    <bpmn:exclusiveGateway id="Gw_Valido" name="¿Completo?"/>
+    <bpmn:task id="Task_GenerarCodigo" name="Generar código y crear expediente"/>
+    <bpmn:task id="Task_AsignarDestino" name="Asignar oficina destino inicial"/>
+    <bpmn:task id="Task_NotificarRegistro" name="Notificar registro (correo/SMS)"/>
+    <bpmn:task id="Task_AtenderTOBE" name="Atender expediente en bandeja (backoffice)"/>
+    <bpmn:exclusiveGateway id="Gw_Obs" name="¿Observación?"/>
+    <bpmn:task id="Task_Observar" name="Registrar observación y solicitar subsanación"/>
+    <bpmn:task id="Task_SubsanarOnline" name="Subsanar en línea (adjuntar documentos)"/>
+    <bpmn:task id="Task_ResolverTOBE" name="Resolver trámite (aprobar/rechazar)"/>
+    <bpmn:task id="Task_AdjuntarRespuesta" name="Adjuntar respuesta oficial (PDF)"/>
+    <bpmn:task id="Task_Cerrar" name="Cerrar trámite y registrar auditoría"/>
+    <bpmn:task id="Task_NotificarCierre" name="Notificar cierre y habilitar descarga"/>
+    <bpmn:endEvent id="End_TOBE" name="Fin"/>
+
+    <bpmn:sequenceFlow id="TFlow_1" sourceRef="Start_TOBE" targetRef="Task_RegistroOnline"/>
+    <bpmn:sequenceFlow id="TFlow_2" sourceRef="Task_RegistroOnline" targetRef="Task_ValidarAuto"/>
+    <bpmn:sequenceFlow id="TFlow_3" sourceRef="Task_ValidarAuto" targetRef="Gw_Valido"/>
+    <bpmn:sequenceFlow id="TFlow_4" name="Sí" sourceRef="Gw_Valido" targetRef="Task_GenerarCodigo"/>
+    <bpmn:sequenceFlow id="TFlow_5" name="No" sourceRef="Gw_Valido" targetRef="Task_SubsanarOnline"/>
+    <bpmn:sequenceFlow id="TFlow_6" sourceRef="Task_SubsanarOnline" targetRef="Task_ValidarAuto"/>
+    <bpmn:sequenceFlow id="TFlow_7" sourceRef="Task_GenerarCodigo" targetRef="Task_AsignarDestino"/>
+    <bpmn:sequenceFlow id="TFlow_8" sourceRef="Task_AsignarDestino" targetRef="Task_NotificarRegistro"/>
+    <bpmn:sequenceFlow id="TFlow_9" sourceRef="Task_NotificarRegistro" targetRef="Task_AtenderTOBE"/>
+    <bpmn:sequenceFlow id="TFlow_10" sourceRef="Task_AtenderTOBE" targetRef="Gw_Obs"/>
+    <bpmn:sequenceFlow id="TFlow_11" name="Sí" sourceRef="Gw_Obs" targetRef="Task_Observar"/>
+    <bpmn:sequenceFlow id="TFlow_12" sourceRef="Task_Observar" targetRef="Task_SubsanarOnline"/>
+    <bpmn:sequenceFlow id="TFlow_13" name="No" sourceRef="Gw_Obs" targetRef="Task_ResolverTOBE"/>
+    <bpmn:sequenceFlow id="TFlow_14" sourceRef="Task_ResolverTOBE" targetRef="Task_AdjuntarRespuesta"/>
+    <bpmn:sequenceFlow id="TFlow_15" sourceRef="Task_AdjuntarRespuesta" targetRef="Task_Cerrar"/>
+    <bpmn:sequenceFlow id="TFlow_16" sourceRef="Task_Cerrar" targetRef="Task_NotificarCierre"/>
+    <bpmn:sequenceFlow id="TFlow_17" sourceRef="Task_NotificarCierre" targetRef="End_TOBE"/>
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_2">
+    <bpmndi:BPMNPlane id="BPMNPlane_2" bpmnElement="Collaboration_2">
+      <bpmndi:BPMNShape id="Participant_SIGTRAD_TOBE_di" bpmnElement="Participant_SIGTRAD_TOBE" isHorizontal="true">
+        <dc:Bounds x="140" y="80" width="1460" height="220"/>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Start_TOBE_di" bpmnElement="Start_TOBE"><dc:Bounds x="200" y="162" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_RegistroOnline_di" bpmnElement="Task_RegistroOnline"><dc:Bounds x="270" y="140" width="200" height="80"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ValidarAuto_di" bpmnElement="Task_ValidarAuto"><dc:Bounds x="500" y="140" width="220" height="80"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gw_Valido_di" bpmnElement="Gw_Valido" isMarkerVisible="true"><dc:Bounds x="750" y="155" width="50" height="50"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_GenerarCodigo_di" bpmnElement="Task_GenerarCodigo"><dc:Bounds x="830" y="140" width="220" height="80"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_AsignarDestino_di" bpmnElement="Task_AsignarDestino"><dc:Bounds x="1080" y="140" width="220" height="80"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_NotificarRegistro_di" bpmnElement="Task_NotificarRegistro"><dc:Bounds x="1330" y="140" width="220" height="80"/></bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="TFlow_1_di" bpmnElement="TFlow_1"><di:waypoint x="236" y="180"/><di:waypoint x="270" y="180"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="TFlow_2_di" bpmnElement="TFlow_2"><di:waypoint x="470" y="180"/><di:waypoint x="500" y="180"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="TFlow_3_di" bpmnElement="TFlow_3"><di:waypoint x="720" y="180"/><di:waypoint x="750" y="180"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="TFlow_4_di" bpmnElement="TFlow_4"><di:waypoint x="800" y="180"/><di:waypoint x="830" y="180"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="TFlow_7_di" bpmnElement="TFlow_7"><di:waypoint x="1050" y="180"/><di:waypoint x="1080" y="180"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="TFlow_8_di" bpmnElement="TFlow_8"><di:waypoint x="1300" y="180"/><di:waypoint x="1330" y="180"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

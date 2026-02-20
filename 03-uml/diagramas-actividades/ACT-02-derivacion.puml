@@ -1,0 +1,11 @@
+@startuml
+start
+:Oficina abre bandeja;
+:Selecciona expediente;
+:Revisar y decidir derivación;
+:Elegir destino + motivo;
+:Registrar movimiento (auditoría);
+:Actualizar responsable;
+:Notificar destino;
+stop
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+start
+:Ingresar al portal / ventanilla;
+:Seleccionar tipo de trámite;
+:Ingresar datos del solicitante;
+:Adjuntar documentos;
+:Validar requisitos automáticamente;
+if (¿Cumple?) then (Sí)
+  :Generar código y registrar expediente;
+  :Asignar destino inicial;
+  :Notificar confirmación;
+else (No)
+  :Mostrar faltantes y bloquear envío;
+endif
+stop
+@enduml
